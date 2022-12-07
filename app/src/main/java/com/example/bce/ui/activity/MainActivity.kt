@@ -1,19 +1,20 @@
-package com.example.bce
+package com.example.bce.ui.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatButton
+import com.example.bce.R
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var auth : FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val crashButton : AppCompatButton = findViewById(R.id.crashButton)
-
-        crashButton.setOnClickListener {
-            throw RuntimeException("Register")
-        }
+        auth = Firebase.auth
     }
-
 }
