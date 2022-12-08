@@ -1,4 +1,6 @@
 package com.example.bce.shared.viewmodel
 
-class UserAccountViewModel {
+import androidx.lifecycle.ViewModel
+
+class UserAccountViewModel : ViewModel(){
 }
