@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.example.bce.R
+import com.example.bce.shared.utils.GlobalToaster
 
 
 class SignUpFragment : Fragment() {
@@ -30,11 +31,30 @@ class SignUpFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_sign_up, container, false)
 
 
+        firstName = view.findViewById(R.id.firstNameInputText)
+        lastName = view.findViewById(R.id.lastNameInputText)
+        address = view.findViewById(R.id.addressInputText)
+        phoneNumber = view.findViewById(R.id.phoneNumberInputText)
+        password = view.findViewById(R.id.passwordInputText)
+        email = view.findViewById(R.id.emailInputText)
+
+
         createAccountButton = view.findViewById(R.id.signUpButton)
 
         createAccountButton.setOnClickListener {
-            toastUserVerify()
-            createAccountButton.findNavController().navigate(R.id.action_signUpFragment_to_loginFragment)
+            if(checkInputsEmpty(firstName)
+                && checkInputsEmpty(lastName)
+                && checkInputsEmpty(address)
+                && checkInputsEmpty(phoneNumber)
+                && checkInputsEmpty(email)
+                && checkInputsEmpty(password)
+            ){
+                toastUserVerify()
+                createAccountButton.findNavController().navigate(R.id.action_signUpFragment_to_loginFragment)
+
+            } else {
+                GlobalToaster.promptFormFulfill(requireContext())
+            }
         }
 
 
@@ -45,8 +65,11 @@ class SignUpFragment : Fragment() {
         Toast.makeText(requireContext(), "Please Verify Your Account and Login.", Toast.LENGTH_LONG).show()
     }
 
-    fun checkInputsEmpty(){
-
+    fun checkInputsEmpty(textBox : EditText) : Boolean{
+        if(textBox.text == null || textBox.length() == 0){
+            return false
+        }
+        return true
     }
 
     fun checkFirstName(){
@@ -72,4 +95,5 @@ class SignUpFragment : Fragment() {
     fun checkPassword() {
 
     }
+
 }
