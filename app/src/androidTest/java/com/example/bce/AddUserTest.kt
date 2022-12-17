@@ -38,7 +38,7 @@ class AddUserTest {
     fun createTestUserObject() : User {
 
         val user =  User(
-            Int.MAX_VALUE,
+            //Int.MAX_VALUE,
             "first",
             "last",
             "1111 address",
@@ -54,7 +54,7 @@ class AddUserTest {
 
         val user = createTestUserObject()
         val userHashMap : HashMap<String, Any> = hashMapOf(
-            "userId" to user.userId,
+            //"userId" to user.userId,
             "firstName" to user.firstName,
             "lastName" to user.lastName,
             "address" to user.address,
