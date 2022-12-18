@@ -6,11 +6,12 @@ import com.example.bce.data.model.User
 class SignUpViewModel : ViewModel() {
 
     var user = User(
-        //(0..9999).random(),
+        (0..9999).random(),
         "",
         "",
         "",
         "",
-        "",
+    "",
+    "",
     "")
 }

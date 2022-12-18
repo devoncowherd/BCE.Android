@@ -1,7 +1,7 @@
 package com.example.bce.ui.fragment
 
-import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +9,8 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.example.bce.R
-import com.example.bce.shared.utils.GlobalToaster
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -20,9 +20,11 @@ class LoginFragment : Fragment() {
 
     private lateinit var signUpButton : Button
     private lateinit var loginButton : Button
-    private lateinit var username : EditText
+    private lateinit var email : EditText
     private lateinit var password : EditText
     private lateinit var auth : FirebaseAuth
+
+    private val TAG = LoginFragment::class::simpleName
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,46 +35,44 @@ class LoginFragment : Fragment() {
 
         loginButton = view.findViewById(R.id.loginButton)
         signUpButton = view.findViewById(R.id.signUpButton)
-        username = view.findViewById(R.id.usernameInput)
+        email = view.findViewById(R.id.emailInput)
         password = view.findViewById(R.id.passwordInput)
         auth = Firebase.auth
 
-
-//        initSignInButton()
-//        initAuthViewModel()
-//        initGoogleSignInClient()
-
-
-
+        if(auth.currentUser != null){
+            findNavController().navigate(R.id.action_loginFragment_to_accountFragment)
+        }
 
         loginButton.setOnClickListener{
-            if(checkTextBoxEmpty(username, password, requireContext()) > 0){
-                    if(this.auth.currentUser == null){
-                        println("null")
-                        loginButton.findNavController().navigate(R.id.action_loginFragment_to_accountFragment)
-                    } else {
-                        loginButton.findNavController().navigate(R.id.action_loginFragment_to_accountFragment)
+            if(checkTextBoxEmpty(this.email,this.password)){
+                auth.signInWithEmailAndPassword(
+                    this.email.text.toString(),
+                    this.password.text.toString())
+                    .addOnCompleteListener(requireActivity()){ task ->
+                        if(task.isSuccessful) {
+                            Log.d(TAG.toString(), "Login Successful")
+                            it.findNavController().navigate(R.id.action_loginFragment_to_accountFragment)
+                        } else {
+                            Log.d(TAG.toString(), "Login Unsuccessful")
+                        }
                     }
-                }
             }
+        }
 
 
         //passwordless sign-in? https://firebase.google.com/docs/auth/android/email-link-auth?authuser=1&hl=en
         signUpButton.setOnClickListener {
-            signUpButton.findNavController().navigate(R.id.action_loginFragment_to_signUpFragment)
+            it.findNavController().navigate(R.id.action_loginFragment_to_signUpFragment)
         }
 
         return view;
     }
 
 
-    fun checkTextBoxEmpty(username : EditText, password: EditText, context : Context) : Int{
-        println(username.length())
-        if(username.length() <= 0 || password.length() <= 0){
-            GlobalToaster.promptFormFulfill(context)
-            return -1
+    fun checkTextBoxEmpty(email : EditText, password: EditText) : Boolean{
+        if(email.length() <= 0 || password.length() <= 0){
+            return false
         }
-        return 1
+        return true
     }
-
 }

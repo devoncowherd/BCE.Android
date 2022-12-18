@@ -1,6 +1,5 @@
 package com.example.bce.ui.fragment
 
-import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,10 +14,8 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
 import com.example.bce.R
 import com.example.bce.shared.utils.GlobalToaster
-import com.example.bce.shared.viewmodel.AuthViewModel
 import com.example.bce.shared.viewmodel.SignUpViewModel
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -34,14 +31,8 @@ class SignUpFragment : Fragment() {
     private lateinit var createAccountButton : Button
 
     private val signUpViewModel : SignUpViewModel by viewModels()
-    private val authViewModel : AuthViewModel by viewModels()
 
     private val TAG = SignUpFragment::class.simpleName
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,7 +48,7 @@ class SignUpFragment : Fragment() {
         phoneNumber = view.findViewById(R.id.phoneNumberInputText)
         password = view.findViewById(R.id.passwordInputText)
         email = view.findViewById(R.id.emailInputText)
-        var auth = authViewModel.auth
+        var auth = Firebase.auth
 
         createAccountButton = view.findViewById(R.id.signUpButton)
 
@@ -82,26 +73,32 @@ class SignUpFragment : Fragment() {
                         "password" to this.password.text.toString()
                     )
 
-                    db.collection("users")
-                        .add(newUser)
-                        .addOnSuccessListener { documentReference ->
-                            Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
-                        }
-                        .addOnFailureListener { e ->
-                            Log.w(TAG, "Error adding document", e)
-                        }
 
-                    auth?.createUserWithEmailAndPassword(newUser["email"]!!,
+
+                    auth.createUserWithEmailAndPassword(newUser["email"]!!,
                     newUser["password"]!!)
-                        ?.addOnCompleteListener(Activity(), OnCompleteListener<AuthResult> { task ->
+                        .addOnCompleteListener(requireActivity()){ task ->
                             if(task.isSuccessful){
+
+                                newUser.put(
+                                    "userId", auth.uid.toString()
+                                )
+                                db.collection("users")
+                                    .add(newUser)
+                                    .addOnSuccessListener { documentReference ->
+                                        Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                                    }
+                                    .addOnFailureListener { e ->
+                                        Log.w(TAG, "Error adding document", e)
+                                    }
+
                                 Log.d(TAG,"createUserWithEmail:Success")
                                 val user  = auth?.currentUser
 
                             } else {
                                 Log.w(TAG, "createUserWithEmail:Failure", task.exception)
                             }
-                        })
+                        }
 
                     toastUserVerify()
                     createAccountButton.findNavController().navigate(R.id.action_signUpFragment_to_loginFragment)
