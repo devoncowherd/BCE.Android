@@ -7,7 +7,7 @@
     tools:context=".ui.fragment.AccountFragment">
 
     <TextView
-        android:id="@+id/userFirstName"
+        android:id="@+id/accountFirstName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="firstName"
@@ -16,11 +16,11 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
-        android:id="@+id/userLastName"
+        android:id="@+id/accountLastName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="lastName"
-        app:layout_constraintTop_toBottomOf="@id/userFirstName"
+        app:layout_constraintTop_toBottomOf="@id/accountFirstName"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         />

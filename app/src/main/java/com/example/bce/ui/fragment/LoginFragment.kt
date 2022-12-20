@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.bce.R
+import com.example.bce.shared.utils.GlobalToaster
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -56,6 +57,8 @@ class LoginFragment : Fragment() {
                             Log.d(TAG.toString(), "Login Unsuccessful")
                         }
                     }
+            } else {
+                GlobalToaster.promptFormFulfill(requireContext())
             }
         }
 

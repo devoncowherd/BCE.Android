@@ -11,4 +11,11 @@
     <string name="address">Address</string>
     <string name="phoneNumber">Phone Number</string>
     <string name="email">Email</string>
+    <string name="active">Active</string>
+    <string name="none">None</string>
+    <string name="problemDescription">Description</string>
+    <string name="contactNumber">Contact Number</string>
+    <string name="contactEmail">Contact Email</string>
+    <string name="nonEmergency">Non-Emergency</string>
+    <string name="emergency">Emergency</string>
 </resources>

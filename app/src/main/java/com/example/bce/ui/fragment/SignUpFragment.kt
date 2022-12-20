@@ -13,6 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
 import com.example.bce.R
+import com.example.bce.data.model.BCEUser
 import com.example.bce.shared.utils.GlobalToaster
 import com.example.bce.shared.viewmodel.SignUpViewModel
 import com.google.firebase.auth.ktx.auth
@@ -64,36 +65,34 @@ class SignUpFragment : Fragment() {
                 if(isValidAccount()){
                     val db = Firebase.firestore
 
-                    val newUser = hashMapOf(
-                        "firstName"  to this.firstName.text.toString(),
-                        "lastName" to this.lastName.text.toString(),
-                        "address" to this.address.text.toString(),
-                        "phoneNumber" to this.phoneNumber.text.toString(),
-                        "email" to this.email.text.toString(),
-                        "password" to this.password.text.toString()
+                    val newUser = BCEUser(
+                        null,
+                        this.firstName.text.toString(),
+                        "",
+                        this.lastName.text.toString(),
+                        this.address.text.toString(),
+                        this.phoneNumber.text.toString(),
+                        this.email.text.toString(),
+                        this.password.text.toString()
                     )
 
-
-
-                    auth.createUserWithEmailAndPassword(newUser["email"]!!,
-                    newUser["password"]!!)
+                    auth.createUserWithEmailAndPassword(newUser.email.toString(),
+                    newUser.password.toString())
                         .addOnCompleteListener(requireActivity()){ task ->
                             if(task.isSuccessful){
 
-                                newUser.put(
-                                    "userId", auth.uid.toString()
-                                )
+                                newUser.userId = auth.uid.toString()
                                 db.collection("users")
-                                    .add(newUser)
+                                    .document(auth.uid.toString())
+                                    .set(newUser)
                                     .addOnSuccessListener { documentReference ->
-                                        Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                                        Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference}")
                                     }
                                     .addOnFailureListener { e ->
                                         Log.w(TAG, "Error adding document", e)
                                     }
 
                                 Log.d(TAG,"createUserWithEmail:Success")
-                                val user  = auth?.currentUser
 
                             } else {
                                 Log.w(TAG, "createUserWithEmail:Failure", task.exception)

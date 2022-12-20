@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.bce.R
+import com.example.bce.data.model.BCEUser
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -15,7 +16,6 @@ class MainActivity : AppCompatActivity() {
     private val TAG = MainActivity::class.simpleName
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -23,19 +23,19 @@ class MainActivity : AppCompatActivity() {
         auth = Firebase.auth
         val db = Firebase.firestore
 
-        if(auth.currentUser != null) {
-            println(auth.currentUser.toString())
-        }
+        val userCollection = db.collection("users")
 
-        db.collection("users")
-            .get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-                    Log.d(TAG, "${document.id} => ${document.data}")
+        if(auth.currentUser != null) {
+            Log.d(TAG, auth.uid.toString())
+
+            userCollection
+                .document(auth.uid.toString())
+                .get()
+                .addOnSuccessListener { documentSnapshot ->
+                    val user = documentSnapshot.toObject(BCEUser::class.java)
+
+                    Log.d(TAG,user?.email.toString())
                 }
-            }
-            .addOnFailureListener { e ->
-                Log.w(TAG, "Error getting documents.", e)
-            }
+        }
     }
 }
