@@ -18,4 +18,9 @@
     <string name="contactEmail">Contact Email</string>
     <string name="nonEmergency">Non-Emergency</string>
     <string name="emergency">Emergency</string>
+    <string name="valid"></string>
+    <string name="validAddressDescription"></string>
+    <string name="validNameDescription"></string>
+    <string name="validEmailDescription"></string>
+    <string name="validPasswordDescription"></string>
 </resources>

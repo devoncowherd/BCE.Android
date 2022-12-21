@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -30,6 +31,7 @@ class SignUpFragment : Fragment() {
     private lateinit var email : EditText
     private lateinit var password : EditText
     private lateinit var createAccountButton : Button
+    private lateinit var autocompleteFragment : AutoCompleteTextView
 
     private val signUpViewModel : SignUpViewModel by viewModels()
 
@@ -49,9 +51,9 @@ class SignUpFragment : Fragment() {
         phoneNumber = view.findViewById(R.id.phoneNumberInputText)
         password = view.findViewById(R.id.passwordInputText)
         email = view.findViewById(R.id.emailInputText)
-        var auth = Firebase.auth
-
         createAccountButton = view.findViewById(R.id.signUpButton)
+
+        var auth = Firebase.auth
 
         createAccountButton.setOnClickListener {
             if(checkInputsEmpty(firstName)
