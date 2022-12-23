@@ -58,6 +58,22 @@
                 android:layout_width="320dp"
                 android:layout_height="wrap_content"
                 android:hint="@string/address" />
+
+            <TextView
+                android:id="@+id/addressWarning"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:text="@string/validAddressDescription"
+                android:background="@color/warn"
+                android:textColor="@color/white"
+                android:alpha="0.8"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/addressInputLayout"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"/>
+
+
+
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageButton
@@ -67,9 +83,8 @@
             android:background="@null"
             android:src="@drawable/ic_baseline_info_24"
             android:alpha="0.5"
-            android:layout_margin="8dp"
+            android:layout_margin="16dp"
             app:layout_constraintTop_toTopOf="@id/addressInputLayout"
-            app:layout_constraintBottom_toBottomOf="@id/addressInputLayout"
             app:layout_constraintRight_toRightOf="@id/addressInputLayout"/>
 
 
@@ -88,6 +103,19 @@
                 android:layout_width="320dp"
                 android:layout_height="wrap_content"
                 android:hint="@string/firstName"/>
+            <TextView
+                android:id="@+id/firstNameWarning"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:text="@string/validNameDescription"
+                android:background="@color/warn"
+                android:textColor="@color/white"
+                android:alpha="0.8"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/firstNameInputLayout"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"/>
+
         </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -98,9 +126,8 @@
             android:background="@null"
             android:src="@drawable/ic_baseline_info_24"
             android:alpha="0.5"
-            android:layout_margin="8dp"
+            android:layout_margin="16dp"
             app:layout_constraintTop_toTopOf="@id/firstNameInputLayout"
-            app:layout_constraintBottom_toBottomOf="@id/firstNameInputLayout"
             app:layout_constraintRight_toRightOf="@id/firstNameInputLayout"/>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -117,6 +144,20 @@
                 android:layout_width="320dp"
                 android:layout_height="wrap_content"
                 android:hint="@string/lastName"/>
+            <TextView
+                android:id="@+id/lastNameWarning"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:text="@string/validNameDescription"
+                android:background="@color/warn"
+                android:textColor="@color/white"
+                android:alpha="0.8"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/lastNameInputLayout"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"/>
+
+
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageButton
@@ -126,9 +167,8 @@
             android:background="@null"
             android:src="@drawable/ic_baseline_info_24"
             android:alpha="0.5"
-            android:layout_margin="8dp"
+            android:layout_margin="16dp"
             app:layout_constraintTop_toTopOf="@id/lastNameInputLayout"
-            app:layout_constraintBottom_toBottomOf="@id/lastNameInputLayout"
             app:layout_constraintRight_toRightOf="@id/lastNameInputLayout"/>
 
 
@@ -147,6 +187,21 @@
                 android:layout_width="320dp"
                 android:layout_height="wrap_content"
                 android:hint="@string/phoneNumber" />
+            <TextView
+                android:id="@+id/phoneNumberWarning"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:text="@string/validPhoneNumberDescription"
+                android:background="@color/warn"
+                android:textColor="@color/white"
+                android:alpha="0.8"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/phoneNumberInputLayout"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"/>
+
+
+
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageButton
@@ -156,9 +211,8 @@
             android:background="@null"
             android:src="@drawable/ic_baseline_info_24"
             android:alpha="0.5"
-            android:layout_margin="8dp"
+            android:layout_margin="16dp"
             app:layout_constraintTop_toTopOf="@id/phoneNumberInputLayout"
-            app:layout_constraintBottom_toBottomOf="@id/phoneNumberInputLayout"
             app:layout_constraintRight_toRightOf="@id/phoneNumberInputLayout"/>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -175,6 +229,18 @@
                 android:layout_width="320dp"
                 android:layout_height="wrap_content"
                 android:hint="@string/email" />
+            <TextView
+                android:id="@+id/emailWarning"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:text="@string/validEmailDescription"
+                android:background="@color/warn"
+                android:textColor="@color/white"
+                android:alpha="0.8"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/emailInputLayout"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageButton
@@ -184,9 +250,8 @@
             android:background="@null"
             android:src="@drawable/ic_baseline_info_24"
             android:alpha="0.5"
-            android:layout_margin="8dp"
+            android:layout_margin="16dp"
             app:layout_constraintTop_toTopOf="@id/emailInputLayout"
-            app:layout_constraintBottom_toBottomOf="@id/emailInputLayout"
             app:layout_constraintRight_toRightOf="@id/emailInputLayout"/>
 
 
@@ -204,6 +269,71 @@
                 android:layout_width="320dp"
                 android:layout_height="wrap_content"
                 android:hint="@string/password" />
+            <TextView
+                android:id="@+id/passwordWarning"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:text="@string/validPasswordDescription"
+                android:background="@color/warn"
+                android:textColor="@color/white"
+                android:alpha="0.8"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/passwordInputLayout"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"/>
+
+
+            <TextView
+                android:id="@+id/passwordRequirementLower"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:text="@string/requirementLowercase"
+                android:background="@color/warn"
+                android:textColor="@color/white"
+                android:alpha="0.8"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/passwordWarning"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"/>
+
+            <TextView
+                android:id="@+id/passwordRequirementUpper"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:text="@string/requirementUppercase"
+                android:background="@color/warn"
+                android:textColor="@color/white"
+                android:alpha="0.8"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/passwordRequirementLower"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"/>
+
+            <TextView
+                android:id="@+id/passwordRequirementNumber"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:text="@string/requirementNumber"
+                android:background="@color/warn"
+                android:textColor="@color/white"
+                android:alpha="0.8"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/passwordRequirementUpper"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"/>
+
+            <TextView
+                android:id="@+id/passwordRequirementSpecial"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:text="@string/requirementLength"
+                android:background="@color/warn"
+                android:textColor="@color/white"
+                android:alpha="0.8"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/passwordRequirementNumber"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageButton
@@ -213,9 +343,8 @@
             android:background="@null"
             android:src="@drawable/ic_baseline_info_24"
             android:alpha="0.5"
-            android:layout_margin="8dp"
+            android:layout_margin="16dp"
             app:layout_constraintTop_toTopOf="@id/passwordInputLayout"
-            app:layout_constraintBottom_toBottomOf="@id/passwordInputLayout"
             app:layout_constraintRight_toRightOf="@id/passwordInputLayout"/>
 
 
@@ -228,6 +357,10 @@
             app:layout_constraintTop_toBottomOf="@id/passwordInputLayout"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"/>
+
+        <!--WARNING SECTION-->
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

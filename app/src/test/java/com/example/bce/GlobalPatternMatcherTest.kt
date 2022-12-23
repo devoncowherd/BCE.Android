@@ -12,7 +12,6 @@ class GlobalPatternMatcherTest {
         assertEquals(true,true)
     }
 
-    //TODO: Why is this failing?
     @Test
     fun name_isValid(){
         val name : String = "Jane"
@@ -48,5 +47,13 @@ class GlobalPatternMatcherTest {
     fun phoneNumber_isNotValid() {
         assertEquals(false, GlobalPatternMatcher.checkPhoneNumberValid("556054756968"))
         assertEquals(false, GlobalPatternMatcher.checkPhoneNumberValid("605 475-6968"))
+    }
+
+    @Test
+    fun password_requirementsMet() {
+        assertEquals(true, GlobalPatternMatcher.checkIncludesLowerCase("aa##Ba"))
+        assertEquals(true, GlobalPatternMatcher.checkIncludesUpperCase("AA32aA"))
+        assertEquals(true, GlobalPatternMatcher.checkIncludesSpecialCharacter("@!!av"))
+        assertEquals(true, GlobalPatternMatcher.checkLength("aaabbbccc"))
     }
 }

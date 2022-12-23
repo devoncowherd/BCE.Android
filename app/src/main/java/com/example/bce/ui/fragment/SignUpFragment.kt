@@ -1,17 +1,16 @@
 package com.example.bce.ui.fragment
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
 import com.example.bce.R
 import com.example.bce.data.model.BCEUser
@@ -31,7 +30,9 @@ class SignUpFragment : Fragment() {
     private lateinit var email : EditText
     private lateinit var password : EditText
     private lateinit var createAccountButton : Button
-    private lateinit var autocompleteFragment : AutoCompleteTextView
+
+    //TODO: Implement autocomplete fragment if requested later (prevent junk address)
+    //private lateinit var autocompleteFragment : AutoCompleteTextView
 
     private val signUpViewModel : SignUpViewModel by viewModels()
 
@@ -53,7 +54,16 @@ class SignUpFragment : Fragment() {
         email = view.findViewById(R.id.emailInputText)
         createAccountButton = view.findViewById(R.id.signUpButton)
 
+        var accountValid = false
         var auth = Firebase.auth
+
+        setListeners(this.firstName,
+            this.lastName,
+            this.address,
+            this.phoneNumber,
+            this.email,
+            this.password
+        )
 
         createAccountButton.setOnClickListener {
             if(checkInputsEmpty(firstName)
@@ -64,7 +74,7 @@ class SignUpFragment : Fragment() {
                 && checkInputsEmpty(password)
             ){
 
-                if(isValidAccount()){
+                if(accountValid){
                     val db = Firebase.firestore
 
                     val newUser = BCEUser(
@@ -101,7 +111,7 @@ class SignUpFragment : Fragment() {
                             }
                         }
 
-                    toastUserVerify()
+                    GlobalToaster.promptVerifyAccount(requireContext())
                     createAccountButton.findNavController().navigate(R.id.action_signUpFragment_to_loginFragment)
                 }
 
@@ -114,46 +124,47 @@ class SignUpFragment : Fragment() {
         return view
     }
 
-    fun toastUserVerify(){
-        Toast.makeText(requireContext(), "Please Verify Your Account and Login.", Toast.LENGTH_LONG).show()
-    }
 
-    fun checkInputsEmpty(textBox : EditText) : Boolean{
+    private fun checkInputsEmpty(textBox : EditText) : Boolean{
         if(textBox.text == null || textBox.length() == 0){
             return false
         }
         return true
     }
 
-    fun checkFirstName(){
 
+    private fun validateFirstName(editText : EditText) : Boolean{
+
+        editText.addTextChangedListener( object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                //TODO: Upon text-change, check if the String is a valid entry and pass it to the ViewModel
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                TODO("Not yet implemented")
+            }
+
+        })
+
+        return false
     }
 
-    fun checkLastName(){
+    private fun setListeners(firstName : EditText,
+                                lastName : EditText,
+                                address : EditText,
+                                phoneNumber : EditText,
+                                email : EditText,
+                                password : EditText
+                                ) {
 
+        //TODO: Create all listeners for the EditTexts
+        //validateFirstName()
     }
 
-    fun checkAddress(){
 
-    }
-
-    fun checkPhoneNumber(){
-
-    }
-
-    fun checkEmail(){
-
-    }
-
-    fun checkPassword() {
-
-    }
-
-    fun isValidAccount() : Boolean {
-        return true
-    }
-
-    fun getViewModelInformation(view : View, viewModel : ViewModel){
-    }
 
 }
