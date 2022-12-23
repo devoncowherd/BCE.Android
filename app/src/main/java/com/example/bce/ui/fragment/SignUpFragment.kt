@@ -9,11 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.example.bce.R
 import com.example.bce.data.model.BCEUser
+import com.example.bce.shared.utils.GlobalPatternMatcher
 import com.example.bce.shared.utils.GlobalToaster
 import com.example.bce.shared.viewmodel.SignUpViewModel
 import com.google.firebase.auth.ktx.auth
@@ -30,6 +32,19 @@ class SignUpFragment : Fragment() {
     private lateinit var email : EditText
     private lateinit var password : EditText
     private lateinit var createAccountButton : Button
+
+    private lateinit var firstNameWarning : TextView
+    private lateinit var lastNameWarning : TextView
+    private lateinit var addressWarning : TextView
+    private lateinit var phoneNumberWarning : TextView
+    private lateinit var emailWarning : TextView
+    private lateinit var passwordWarning : TextView
+    private lateinit var passwordLengthWarning : TextView
+    private lateinit var passwordLowerWarning : TextView
+    private lateinit var passwordUpperWarning : TextView
+    private lateinit var passwordNumberWarning : TextView
+    private lateinit var passwordSpecialWarning : TextView
+
 
     //TODO: Implement autocomplete fragment if requested later (prevent junk address)
     //private lateinit var autocompleteFragment : AutoCompleteTextView
@@ -54,16 +69,26 @@ class SignUpFragment : Fragment() {
         email = view.findViewById(R.id.emailInputText)
         createAccountButton = view.findViewById(R.id.signUpButton)
 
+        firstNameWarning  = view.findViewById(R.id.firstNameWarning)
+        lastNameWarning = view.findViewById(R.id.lastNameWarning)
+        addressWarning = view.findViewById(R.id.addressWarning)
+        phoneNumberWarning = view.findViewById(R.id.phoneNumberWarning)
+        emailWarning = view.findViewById(R.id.emailWarning)
+        passwordWarning = view.findViewById(R.id.passwordWarning)
+        passwordLengthWarning = view.findViewById(R.id.passwordRequirementUpper)
+        passwordLowerWarning = view.findViewById(R.id.passwordRequirementLower)
+        passwordUpperWarning = view.findViewById(R.id.passwordRequirementUpper)
+        passwordNumberWarning = view.findViewById(R.id.phoneNumberWarning)
+        passwordSpecialWarning = view.findViewById(R.id.passwordRequirementSpecial)
+
         var accountValid = false
         var auth = Firebase.auth
 
-        setListeners(this.firstName,
-            this.lastName,
-            this.address,
-            this.phoneNumber,
-            this.email,
-            this.password
-        )
+
+
+
+        validateFirstName(firstName, firstNameWarning)
+        validateLastName(lastName, lastNameWarning)
 
         createAccountButton.setOnClickListener {
             if(checkInputsEmpty(firstName)
@@ -132,16 +157,19 @@ class SignUpFragment : Fragment() {
         return true
     }
 
-
-    private fun validateFirstName(editText : EditText) : Boolean{
-
-        editText.addTextChangedListener( object : TextWatcher {
+    private fun validateLastName(lastName : EditText, warning : TextView) {
+        lastName.addTextChangedListener( object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 TODO("Not yet implemented")
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                //TODO: Upon text-change, check if the String is a valid entry and pass it to the ViewModel
+                signUpViewModel.lastName = lastName.text.toString()
+                if(GlobalPatternMatcher.checkNameValid(signUpViewModel.lastName)){
+                    warning.visibility = View.GONE
+                } else {
+                    warning.visibility = View.VISIBLE
+                }
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -149,20 +177,33 @@ class SignUpFragment : Fragment() {
             }
 
         })
-
-        return false
     }
 
-    private fun setListeners(firstName : EditText,
-                                lastName : EditText,
-                                address : EditText,
-                                phoneNumber : EditText,
-                                email : EditText,
-                                password : EditText
-                                ) {
 
-        //TODO: Create all listeners for the EditTexts
-        //validateFirstName()
+    private fun validateFirstName(firstName : EditText, warning : TextView) : Boolean{
+
+        firstName.addTextChangedListener( object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                //
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                signUpViewModel.firstName = firstName.text.toString()
+                if(GlobalPatternMatcher.checkNameValid(signUpViewModel.firstName)){
+                    warning.visibility = View.GONE
+                } else {
+                    warning.visibility = View.VISIBLE
+                }
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                //
+            }
+
+        })
+
+        return false
     }
 
 

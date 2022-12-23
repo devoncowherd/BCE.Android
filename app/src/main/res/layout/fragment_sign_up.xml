@@ -326,12 +326,25 @@
                 android:id="@+id/passwordRequirementSpecial"
                 android:layout_width="320dp"
                 android:layout_height="wrap_content"
-                android:text="@string/requirementLength"
+                android:text="@string/requirementSpecial"
                 android:background="@color/warn"
                 android:textColor="@color/white"
                 android:alpha="0.8"
                 android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/passwordRequirementNumber"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"/>
+
+            <TextView
+                android:id="@+id/passwordRequirementLength"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:text="@string/requirementLength"
+                android:background="@color/warn"
+                android:textColor="@color/white"
+                android:alpha="0.8"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/passwordRequirementSpecial"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"/>
         </com.google.android.material.textfield.TextInputLayout>
