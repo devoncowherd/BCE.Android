@@ -4,17 +4,18 @@ import java.util.regex.Pattern
 
 class GlobalPatternMatcher {
     companion object {
-        val NAME_REGEX = "^[A-Z][a-z'-]{2,}$"
+        val NAME_REGEX = "^[A-Za-z'-]{2,}$"
         val PHONE_REGEX = "[0-9]{10,11}"
         val FINAL_PASSWORD_REGEX = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@\$!%*?&])[A-Za-z\\d@\$!%*?&]{8,}\$"
         val EMAIL_REGEX = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}\$"
-        val ADDRESS_REGEX = "[0-9A-Za-z .'@#-%&\\/]"
+        val ADDRESS_REGEX = "^.{1,}$"
         val LOWERCASE_REGEX = "^(?=.*[a-z]).+$"
-        val UPPERCASE_REGEX = "^(?=.*[A-Z]).+\$"
-        val SPECIAL_CHARACTER_REGEX = "^(?=.*[!%*?&]).+\$"
+        val UPPERCASE_REGEX = "^(?=.*[A-Z]).+$"
+        val SPECIAL_CHARACTER_REGEX = "^(?=.*[@!%*?&]).+$"
         val STRING_LENGTH_REGEX = "^.{8,}$"
+        val NUMBER_REGEX = "^(?=.*[0-9]).+$"
 
-        fun checkValidEmail(email : String) : Boolean{
+        fun checkValidEmail(email : String) : Boolean {
             val emailPattern = Pattern.compile(EMAIL_REGEX)
             val emailMatcher = emailPattern
                 .matcher(email)
@@ -27,13 +28,13 @@ class GlobalPatternMatcher {
                 .matches()
         }
 
-        fun checkPhoneNumberValid(phoneNumber : String) : Boolean{
+        fun checkPhoneNumberValid(phoneNumber : String) : Boolean {
             return Pattern.compile(PHONE_REGEX)
                 .matcher(phoneNumber)
                 .matches()
         }
 
-        fun checkFinalPasswordValid(password : String) : Boolean{
+        fun checkFinalPasswordValid(password : String) : Boolean {
             return Pattern.compile(FINAL_PASSWORD_REGEX)
                 .matcher(password)
                 .matches()
@@ -63,8 +64,14 @@ class GlobalPatternMatcher {
                 .matches()
         }
 
-        fun checkLength(string : String) : Boolean {
+        fun checkPasswordLength(string : String) : Boolean {
             return Pattern.compile(STRING_LENGTH_REGEX)
+                .matcher(string)
+                .matches()
+        }
+
+        fun checkIncludesNumber(string : String) : Boolean {
+            return Pattern.compile(GlobalPatternMatcher.NUMBER_REGEX)
                 .matcher(string)
                 .matches()
         }

@@ -57,13 +57,13 @@ class SignUpFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_sign_up, container, false)
 
 
         firstName = view.findViewById(R.id.firstNameInputText)
         lastName = view.findViewById(R.id.lastNameInputText)
         address = view.findViewById(R.id.addressInputText)
+        //TODO: Divide address into Address,City, Zip, and State
         phoneNumber = view.findViewById(R.id.phoneNumberInputText)
         password = view.findViewById(R.id.passwordInputText)
         email = view.findViewById(R.id.emailInputText)
@@ -75,20 +75,34 @@ class SignUpFragment : Fragment() {
         phoneNumberWarning = view.findViewById(R.id.phoneNumberWarning)
         emailWarning = view.findViewById(R.id.emailWarning)
         passwordWarning = view.findViewById(R.id.passwordWarning)
-        passwordLengthWarning = view.findViewById(R.id.passwordRequirementUpper)
+        passwordLengthWarning = view.findViewById(R.id.passwordRequirementLength)
         passwordLowerWarning = view.findViewById(R.id.passwordRequirementLower)
         passwordUpperWarning = view.findViewById(R.id.passwordRequirementUpper)
-        passwordNumberWarning = view.findViewById(R.id.phoneNumberWarning)
+        passwordNumberWarning = view.findViewById(R.id.passwordRequirementNumber)
         passwordSpecialWarning = view.findViewById(R.id.passwordRequirementSpecial)
 
         var accountValid = false
         var auth = Firebase.auth
 
+        firstName.setText(signUpViewModel.firstName)
+        lastName.setText(signUpViewModel.lastName)
+        address.setText(signUpViewModel.address)
+        email.setText(signUpViewModel.email)
+        phoneNumber.setText(signUpViewModel.phoneNumber)
 
-
-
+        validateAddress(address, addressWarning )
         validateFirstName(firstName, firstNameWarning)
         validateLastName(lastName, lastNameWarning)
+        validatePhoneNumber(phoneNumber, phoneNumberWarning)
+        validateEmail(email, emailWarning)
+        validatePassword(password,
+                        passwordWarning,
+                        passwordLowerWarning,
+                        passwordUpperWarning,
+                        passwordLengthWarning,
+                        passwordSpecialWarning,
+                        passwordNumberWarning
+        )
 
         createAccountButton.setOnClickListener {
             if(checkInputsEmpty(firstName)
@@ -150,22 +164,112 @@ class SignUpFragment : Fragment() {
     }
 
 
-    private fun checkInputsEmpty(textBox : EditText) : Boolean{
+    private fun checkInputsEmpty(textBox : EditText) : Boolean {
         if(textBox.text == null || textBox.length() == 0){
             return false
         }
         return true
     }
 
-    private fun validateLastName(lastName : EditText, warning : TextView) {
-        lastName.addTextChangedListener( object : TextWatcher {
+
+    private fun validatePassword(password : EditText,
+                                 passwordWarning : TextView,
+                                 passwordLowerWarning : TextView,
+                                 passwordUpperWarning : TextView,
+                                 passwordLengthWarning : TextView,
+                                 passwordSpecialWarning : TextView,
+                                 passwordNumberWarning : TextView
+    ) {
+
+        password.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                TODO("Not yet implemented")
+            }
+
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                signUpViewModel.password = password.text.toString()
+
+                if(GlobalPatternMatcher.checkFinalPasswordValid(signUpViewModel.password)){
+                    passwordWarning.visibility = View.GONE
+                    passwordLowerWarning.visibility = View.GONE
+                    passwordSpecialWarning.visibility = View.GONE
+                    passwordUpperWarning.visibility = View.GONE
+                    passwordLengthWarning.visibility = View.GONE
+                    passwordNumberWarning.visibility = View.GONE
+
+                } else {
+                    passwordWarning.visibility = View.VISIBLE
+
+                    if(GlobalPatternMatcher.checkIncludesLowerCase(signUpViewModel.password)){
+                        passwordLowerWarning.visibility = View.GONE
+                    } else {
+                        passwordLowerWarning.visibility = View.VISIBLE
+                    }
+
+                    if(GlobalPatternMatcher.checkIncludesSpecialCharacter(signUpViewModel.password)){
+                        passwordSpecialWarning.visibility = View.GONE
+                    } else {
+                        passwordSpecialWarning.visibility = View.VISIBLE
+                    }
+
+                    if(GlobalPatternMatcher.checkIncludesUpperCase(signUpViewModel.password)){
+                        passwordUpperWarning.visibility = View.GONE
+                    } else {
+                        passwordUpperWarning.visibility = View.VISIBLE
+                    }
+
+                    if(GlobalPatternMatcher.checkPasswordLength(signUpViewModel.password)){
+                        passwordLengthWarning.visibility = View.GONE
+                    } else {
+                        passwordLengthWarning.visibility = View.VISIBLE
+                    }
+
+                    if(GlobalPatternMatcher.checkIncludesNumber(signUpViewModel.password)){
+                        passwordNumberWarning.visibility = View.GONE
+                    } else {
+                        passwordNumberWarning.visibility = View.VISIBLE
+                    }
+                }
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+        })
+
+    }
+    private fun validateEmail(email :EditText, warning : TextView) {
+        email.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                signUpViewModel.lastName = lastName.text.toString()
-                if(GlobalPatternMatcher.checkNameValid(signUpViewModel.lastName)){
+                signUpViewModel.email = email.text.toString()
+
+                if(GlobalPatternMatcher.checkValidEmail(signUpViewModel.email)){
+                    warning.visibility = View.GONE
+                } else {
+                    warning.visibility = View.VISIBLE
+                }
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+        })
+    }
+
+    private fun validatePhoneNumber(phoneNumber : EditText, warning : TextView) {
+        phoneNumber.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                signUpViewModel.phoneNumber = phoneNumber.text.toString()
+
+                if(GlobalPatternMatcher.checkPhoneNumberValid(signUpViewModel.phoneNumber)){
                     warning.visibility = View.GONE
                 } else {
                     warning.visibility = View.VISIBLE
@@ -173,7 +277,51 @@ class SignUpFragment : Fragment() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                TODO("Not yet implemented")
+            }
+
+        })
+    }
+
+    private fun validateAddress(address : EditText, warning : TextView) {
+        address.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                signUpViewModel.address = address.text.toString()
+
+                if(GlobalPatternMatcher.checkAddressValid(signUpViewModel.address)){
+                    warning.visibility = View.GONE
+                } else {
+                    warning.visibility = View.VISIBLE
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+        })
+    }
+
+    private fun validateLastName(lastName : EditText, warning : TextView) {
+        lastName.addTextChangedListener( object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+                signUpViewModel.lastName = lastName.text.toString()
+
+                if(GlobalPatternMatcher.checkNameValid(signUpViewModel.lastName)){
+                    warning.visibility = View.GONE
+                } else {
+                    warning.visibility = View.VISIBLE
+                }
+
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
             }
 
         })
@@ -184,11 +332,11 @@ class SignUpFragment : Fragment() {
 
         firstName.addTextChangedListener( object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                //
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 signUpViewModel.firstName = firstName.text.toString()
+
                 if(GlobalPatternMatcher.checkNameValid(signUpViewModel.firstName)){
                     warning.visibility = View.GONE
                 } else {
@@ -198,7 +346,6 @@ class SignUpFragment : Fragment() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                //
             }
 
         })

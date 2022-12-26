@@ -9,6 +9,9 @@
     <string name="firstName">First Name</string>
     <string name="lastName">Last Name</string>
     <string name="address">Address</string>
+    <string name="city">City</string>
+    <string name="state">State</string>
+    <string name="zip">Zip</string>
     <string name="phoneNumber">Phone Number</string>
     <string name="email">Email</string>
     <string name="active">Active</string>
@@ -28,4 +31,5 @@
     <string name="requirementUppercase">Minimum One Uppercase Letter</string>
     <string name="requirementSpecial">Minimum One Special Character ($!@)</string>
     <string name="requirementNumber">Minimum One Number</string>
+    <string name="login">Login</string>
 </resources>

@@ -54,6 +54,7 @@ class GlobalPatternMatcherTest {
         assertEquals(true, GlobalPatternMatcher.checkIncludesLowerCase("aa##Ba"))
         assertEquals(true, GlobalPatternMatcher.checkIncludesUpperCase("AA32aA"))
         assertEquals(true, GlobalPatternMatcher.checkIncludesSpecialCharacter("@!!av"))
-        assertEquals(true, GlobalPatternMatcher.checkLength("aaabbbccc"))
+        assertEquals(true, GlobalPatternMatcher.checkPasswordLength("aaab2228"))
+        assertEquals(true, GlobalPatternMatcher.checkIncludesNumber("55aaa!Sa"))
     }
 }
