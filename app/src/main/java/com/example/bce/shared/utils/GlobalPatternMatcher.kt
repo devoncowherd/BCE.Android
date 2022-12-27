@@ -14,6 +14,8 @@ class GlobalPatternMatcher {
         val SPECIAL_CHARACTER_REGEX = "^(?=.*[@!%*?&]).+$"
         val STRING_LENGTH_REGEX = "^.{8,}$"
         val NUMBER_REGEX = "^(?=.*[0-9]).+$"
+        val ZIP_REGEX = "^.{5,}$"
+        val CITY_REGEX = "^[a-zA-Z'-]{1,}$"
 
         fun checkValidEmail(email : String) : Boolean {
             val emailPattern = Pattern.compile(EMAIL_REGEX)
@@ -73,6 +75,18 @@ class GlobalPatternMatcher {
         fun checkIncludesNumber(string : String) : Boolean {
             return Pattern.compile(GlobalPatternMatcher.NUMBER_REGEX)
                 .matcher(string)
+                .matches()
+        }
+
+        fun checkCityValid(city : String) : Boolean {
+            return Pattern.compile(CITY_REGEX)
+                .matcher(city)
+                .matches()
+        }
+
+        fun checkZipValid(zip : String) : Boolean {
+            return Pattern.compile(ZIP_REGEX)
+                .matcher(zip)
                 .matches()
         }
     }

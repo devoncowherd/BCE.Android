@@ -1,15 +1,15 @@
 package com.example.bce.ui.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
@@ -32,6 +32,9 @@ class SignUpFragment : Fragment() {
     private lateinit var email : EditText
     private lateinit var password : EditText
     private lateinit var createAccountButton : Button
+    private lateinit var state : Spinner
+    private lateinit var zipCode : EditText
+    private lateinit var city : EditText
 
     private lateinit var firstNameWarning : TextView
     private lateinit var lastNameWarning : TextView
@@ -50,8 +53,13 @@ class SignUpFragment : Fragment() {
     //private lateinit var autocompleteFragment : AutoCompleteTextView
 
     private val signUpViewModel : SignUpViewModel by viewModels()
-
     private val TAG = SignUpFragment::class.simpleName
+
+    override fun onGetLayoutInflater(savedInstanceState: Bundle?): LayoutInflater {
+        val inflater = super.onGetLayoutInflater(savedInstanceState)
+        val contextThemeWrapper : Context = ContextThemeWrapper(requireContext(), R.style.Theme_BCE)
+        return inflater;
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,6 +76,33 @@ class SignUpFragment : Fragment() {
         password = view.findViewById(R.id.passwordInputText)
         email = view.findViewById(R.id.emailInputText)
         createAccountButton = view.findViewById(R.id.signUpButton)
+        city = view.findViewById(R.id.cityInputText)
+        zipCode = view.findViewById(R.id.zipInputText)
+        state = view.findViewById(R.id.stateSpinner)
+
+        ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.states_array,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            state.adapter = adapter
+            state.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    //var stateSelection =
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    //TODO("Not yet implemented")
+                }
+
+            }
+        }
 
         firstNameWarning  = view.findViewById(R.id.firstNameWarning)
         lastNameWarning = view.findViewById(R.id.lastNameWarning)
@@ -89,6 +124,7 @@ class SignUpFragment : Fragment() {
         address.setText(signUpViewModel.address)
         email.setText(signUpViewModel.email)
         phoneNumber.setText(signUpViewModel.phoneNumber)
+
 
         validateAddress(address, addressWarning )
         validateFirstName(firstName, firstNameWarning)
@@ -122,6 +158,9 @@ class SignUpFragment : Fragment() {
                         "",
                         this.lastName.text.toString(),
                         this.address.text.toString(),
+                        this.city.text.toString(),
+                        this.state.toString(),
+                        this.zipCode.text.toString(),
                         this.phoneNumber.text.toString(),
                         this.email.text.toString(),
                         this.password.text.toString()
