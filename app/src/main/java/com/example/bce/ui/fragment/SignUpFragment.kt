@@ -18,6 +18,7 @@ import com.example.bce.data.model.BCEUser
 import com.example.bce.shared.utils.GlobalPatternMatcher
 import com.example.bce.shared.utils.GlobalToaster
 import com.example.bce.shared.viewmodel.SignUpViewModel
+import com.example.bce.ui.adapter.StateSpinnerAdapter
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -33,8 +34,10 @@ class SignUpFragment : Fragment() {
     private lateinit var password : EditText
     private lateinit var createAccountButton : Button
     private lateinit var state : Spinner
+    private lateinit var stateArray : Array<String>
     private lateinit var zipCode : EditText
     private lateinit var city : EditText
+    private lateinit var selectedState : TextView
 
     private lateinit var firstNameWarning : TextView
     private lateinit var lastNameWarning : TextView
@@ -71,7 +74,6 @@ class SignUpFragment : Fragment() {
         firstName = view.findViewById(R.id.firstNameInputText)
         lastName = view.findViewById(R.id.lastNameInputText)
         address = view.findViewById(R.id.addressInputText)
-        //TODO: Divide address into Address,City, Zip, and State
         phoneNumber = view.findViewById(R.id.phoneNumberInputText)
         password = view.findViewById(R.id.passwordInputText)
         email = view.findViewById(R.id.emailInputText)
@@ -79,30 +81,33 @@ class SignUpFragment : Fragment() {
         city = view.findViewById(R.id.cityInputText)
         zipCode = view.findViewById(R.id.zipInputText)
         state = view.findViewById(R.id.stateSpinner)
+        stateArray = resources.getStringArray(R.array.states_array)
+        selectedState = view.findViewById(R.id.selectedState)
 
-        ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.states_array,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            state.adapter = adapter
-            state.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    //var stateSelection =
-                }
+        val stateSpinnerAdapter = StateSpinnerAdapter(requireContext(),
+        R.layout.spinner_item_layout,
+        stateArray.toList())
 
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                    //TODO("Not yet implemented")
-                }
+        state.adapter = stateSpinnerAdapter
 
+        state.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                    signUpViewModel.state = parent?.getItemAtPosition(position).toString()
+                    selectedState.text = signUpViewModel.state
+                    //state.selectedItem = parent?.getItemAtPosition(position)
             }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+
         }
+
 
         firstNameWarning  = view.findViewById(R.id.firstNameWarning)
         lastNameWarning = view.findViewById(R.id.lastNameWarning)
@@ -154,16 +159,15 @@ class SignUpFragment : Fragment() {
 
                     val newUser = BCEUser(
                         null,
-                        this.firstName.text.toString(),
-                        "",
-                        this.lastName.text.toString(),
-                        this.address.text.toString(),
-                        this.city.text.toString(),
-                        this.state.toString(),
-                        this.zipCode.text.toString(),
-                        this.phoneNumber.text.toString(),
-                        this.email.text.toString(),
-                        this.password.text.toString()
+                        signUpViewModel.firstName,
+                        signUpViewModel.lastName,
+                        signUpViewModel.address,
+                        signUpViewModel.city,
+                        signUpViewModel.state,
+                        signUpViewModel.zip,
+                        signUpViewModel.phoneNumber,
+                        signUpViewModel.email,
+                        signUpViewModel.password
                     )
 
                     auth.createUserWithEmailAndPassword(newUser.email.toString(),

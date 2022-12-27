@@ -92,9 +92,11 @@
         <Spinner
             android:id="@+id/stateSpinner"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:layout_marginStart="48dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="29dp"
+            android:textAlignment="center"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             app:layout_constraintTop_toBottomOf="@id/cityInputLayout"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/zipInputLayout"
@@ -113,9 +115,19 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/zipInputText"
-                android:layout_width="240dp"
+                android:layout_width="216dp"
                 android:layout_height="wrap_content"/>
         </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/selectedState"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="AL"
+            android:textSize="24sp"
+            app:layout_constraintLeft_toLeftOf="@id/stateSpinner"
+            app:layout_constraintTop_toTopOf="@id/stateSpinner"
+            app:layout_constraintBottom_toBottomOf="@id/stateSpinner" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/firstNameInputLayout"

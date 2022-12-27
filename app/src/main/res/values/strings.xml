@@ -32,4 +32,6 @@
     <string name="requirementSpecial">Minimum One Special Character ($!@)</string>
     <string name="requirementNumber">Minimum One Number (123)</string>
     <string name="login">Login</string>
+    <string name="placeholder">Placeholder</string>
+    <string name="numPlaceholder">00</string>
 </resources>

@@ -2,7 +2,7 @@ package com.example.bce.data.model
 
 data class BCEUser (var userId : String? = null,
                     var firstName : String? = null,
-                    var middleName : String? = null,
+                    //var middleName : String? = null,
                     var lastName : String? = null,
                     var address : String? = null,
                     var city : String? = null,
