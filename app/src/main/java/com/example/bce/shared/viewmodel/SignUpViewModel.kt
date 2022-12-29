@@ -9,7 +9,7 @@ class SignUpViewModel : ViewModel() {
     var address = ""
     var city = ""
     var state = ""
-    var zip = ""
+    var zipCode = ""
     var email = ""
     var password = ""
     var phoneNumber = ""

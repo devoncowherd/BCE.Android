@@ -12,11 +12,11 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
 import com.example.bce.R
 import com.example.bce.data.model.BCEUser
 import com.example.bce.shared.utils.GlobalPatternMatcher
 import com.example.bce.shared.utils.GlobalToaster
+import com.example.bce.shared.viewmodel.AuthViewModel
 import com.example.bce.shared.viewmodel.SignUpViewModel
 import com.example.bce.ui.adapter.StateSpinnerAdapter
 import com.google.firebase.auth.ktx.auth
@@ -55,6 +55,7 @@ class SignUpFragment : Fragment() {
     //TODO: Implement autocomplete fragment if requested later (prevent junk address)
     //private lateinit var autocompleteFragment : AutoCompleteTextView
 
+    private val authViewModel : AuthViewModel by viewModels()
     private val signUpViewModel : SignUpViewModel by viewModels()
     private val TAG = SignUpFragment::class.simpleName
 
@@ -103,7 +104,7 @@ class SignUpFragment : Fragment() {
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                TODO("Not yet implemented")
+                //TODO("Not yet implemented")
             }
 
         }
@@ -146,16 +147,24 @@ class SignUpFragment : Fragment() {
         )
 
         createAccountButton.setOnClickListener {
-            if(checkInputsEmpty(firstName)
-                && checkInputsEmpty(lastName)
-                && checkInputsEmpty(address)
-                && checkInputsEmpty(phoneNumber)
-                && checkInputsEmpty(email)
-                && checkInputsEmpty(password)
+
+            Log.d(TAG,"Button Pressed!")
+            if(checkInputsEmpty(this.firstName)
+                && checkInputsEmpty(this.lastName)
+                && checkInputsEmpty(this.address)
+                && checkInputsEmpty(this.phoneNumber)
+                && checkInputsEmpty(this.email)
+                && checkInputsEmpty(this.password)
+                && checkInputsEmpty(this.zipCode)
+                && checkInputsEmpty(this.city)
+                && signUpViewModel.state != ""
             ){
+                Log.d(TAG, "isValid")
 
                 if(accountValid){
                     val db = Firebase.firestore
+
+                    Log.d(TAG, "isValid")
 
                     val newUser = BCEUser(
                         null,
@@ -164,37 +173,17 @@ class SignUpFragment : Fragment() {
                         signUpViewModel.address,
                         signUpViewModel.city,
                         signUpViewModel.state,
-                        signUpViewModel.zip,
+                        signUpViewModel.zipCode,
                         signUpViewModel.phoneNumber,
                         signUpViewModel.email,
                         signUpViewModel.password
                     )
 
-                    auth.createUserWithEmailAndPassword(newUser.email.toString(),
-                    newUser.password.toString())
-                        .addOnCompleteListener(requireActivity()){ task ->
-                            if(task.isSuccessful){
-
-                                newUser.userId = auth.uid.toString()
-                                db.collection("users")
-                                    .document(auth.uid.toString())
-                                    .set(newUser)
-                                    .addOnSuccessListener { documentReference ->
-                                        Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference}")
-                                    }
-                                    .addOnFailureListener { e ->
-                                        Log.w(TAG, "Error adding document", e)
-                                    }
-
-                                Log.d(TAG,"createUserWithEmail:Success")
-
-                            } else {
-                                Log.w(TAG, "createUserWithEmail:Failure", task.exception)
-                            }
-                        }
+                    //TODO: REVIEW
+                    authViewModel.addUser(newUser,
+                    signUpViewModel.password)
 
                     GlobalToaster.promptVerifyAccount(requireContext())
-                    createAccountButton.findNavController().navigate(R.id.action_signUpFragment_to_loginFragment)
                 }
 
             } else {
@@ -206,7 +195,6 @@ class SignUpFragment : Fragment() {
         return view
     }
 
-
     private fun checkInputsEmpty(textBox : EditText) : Boolean {
         if(textBox.text == null || textBox.length() == 0){
             return false
@@ -214,6 +202,28 @@ class SignUpFragment : Fragment() {
         return true
     }
 
+
+    private fun validateZipCode(zip : EditText) {
+        zip.addTextChangedListener( object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                //TODO("Not yet implemented")
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+                signUpViewModel.zipCode = zip.text.toString()
+                if(GlobalPatternMatcher.checkZipValid(signUpViewModel.zipCode)) {
+
+                }
+                //TODO("Add Form Validations for ZIP)
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                //TODO("Not yet implemented")
+            }
+
+        })
+    }
 
     private fun validatePassword(password : EditText,
                                  passwordWarning : TextView,

@@ -57,4 +57,10 @@ class GlobalPatternMatcherTest {
         assertEquals(true, GlobalPatternMatcher.checkPasswordLength("aaab2228"))
         assertEquals(true, GlobalPatternMatcher.checkIncludesNumber("55aaa!Sa"))
     }
+
+    @Test
+    fun zipCode_isValid() {
+        assertEquals(true, GlobalPatternMatcher.checkZipValid("12345"))
+    }
+
 }
