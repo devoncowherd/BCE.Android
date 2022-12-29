@@ -3,7 +3,11 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
+
+
 
 android {
     compileSdk 32
@@ -40,6 +44,16 @@ android {
 dependencies {
     def nav_version = "2.5.3"
 
+    //Kapt
+    //kapt 'groupId:artifactId:version'
+    kapt "com.google.dagger:hilt-compiler:2.42"
+
+    //Dagger/Hilt
+    implementation "com.google.dagger:hilt-android:2.42"
+
+    //Coroutines
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
+
     //Lifecycle
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 
@@ -66,3 +80,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 }
+
+//kapt {
+  //  correctErrorTypes true
+//}
