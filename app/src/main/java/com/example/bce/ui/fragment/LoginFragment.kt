@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.bce.R
+import com.example.bce.shared.utils.GlobalEncryption
 import com.example.bce.shared.utils.GlobalToaster
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -43,7 +44,7 @@ class LoginFragment : Fragment() {
         val view : View = inflater.inflate(R.layout.fragment_login, container, false)
 
         loginButton = view.findViewById(R.id.loginButton)
-        signUpButton = view.findViewById(R.id.signUpButton)
+        signUpButton = view.findViewById(R.id.createAccountButton)
         email = view.findViewById(R.id.emailInput)
         password = view.findViewById(R.id.passwordInput)
         auth = Firebase.auth
@@ -56,7 +57,8 @@ class LoginFragment : Fragment() {
             if(checkTextBoxEmpty(this.email,this.password)){
                 auth.signInWithEmailAndPassword(
                     this.email.text.toString(),
-                    this.password.text.toString())
+                    GlobalEncryption.encryptPassword(
+                        this.password.text.toString()))
                     .addOnCompleteListener(requireActivity()){ task ->
                         if(task.isSuccessful) {
                             Log.d(TAG.toString(), "Login Successful")

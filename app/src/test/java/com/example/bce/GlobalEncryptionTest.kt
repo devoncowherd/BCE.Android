@@ -22,4 +22,5 @@ class GlobalEncryptionTest {
         return GlobalEncryption.encryptPassword("Password123!@#$%*&") ==
         GlobalEncryption.encryptPassword("Password$%*&")
     }
+
 }

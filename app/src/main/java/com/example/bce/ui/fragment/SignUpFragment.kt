@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.View
@@ -12,18 +11,16 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import com.example.bce.R
 import com.example.bce.data.model.BCEUser
 import com.example.bce.shared.utils.GlobalPatternMatcher
 import com.example.bce.shared.utils.GlobalToaster
-import com.example.bce.shared.viewmodel.AuthViewModel
 import com.example.bce.shared.viewmodel.SignUpViewModel
 import com.example.bce.ui.adapter.StateSpinnerAdapter
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class SignUpFragment : Fragment() {
 
     private lateinit var firstName : EditText
@@ -55,7 +52,6 @@ class SignUpFragment : Fragment() {
     //TODO: Implement autocomplete fragment if requested later (prevent junk address)
     //private lateinit var autocompleteFragment : AutoCompleteTextView
 
-    private val authViewModel : AuthViewModel by viewModels()
     private val signUpViewModel : SignUpViewModel by viewModels()
     private val TAG = SignUpFragment::class.simpleName
 
@@ -78,7 +74,7 @@ class SignUpFragment : Fragment() {
         phoneNumber = view.findViewById(R.id.phoneNumberInputText)
         password = view.findViewById(R.id.passwordInputText)
         email = view.findViewById(R.id.emailInputText)
-        createAccountButton = view.findViewById(R.id.signUpButton)
+        createAccountButton = view.findViewById(R.id.createAccountButton)
         city = view.findViewById(R.id.cityInputText)
         zipCode = view.findViewById(R.id.zipInputText)
         state = view.findViewById(R.id.stateSpinner)
@@ -100,7 +96,6 @@ class SignUpFragment : Fragment() {
             ) {
                     signUpViewModel.state = parent?.getItemAtPosition(position).toString()
                     selectedState.text = signUpViewModel.state
-                    //state.selectedItem = parent?.getItemAtPosition(position)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -122,9 +117,6 @@ class SignUpFragment : Fragment() {
         passwordNumberWarning = view.findViewById(R.id.passwordRequirementNumber)
         passwordSpecialWarning = view.findViewById(R.id.passwordRequirementSpecial)
 
-        var accountValid = false
-        var auth = Firebase.auth
-
         firstName.setText(signUpViewModel.firstName)
         lastName.setText(signUpViewModel.lastName)
         address.setText(signUpViewModel.address)
@@ -137,6 +129,8 @@ class SignUpFragment : Fragment() {
         validateLastName(lastName, lastNameWarning)
         validatePhoneNumber(phoneNumber, phoneNumberWarning)
         validateEmail(email, emailWarning)
+        validateZipCode(zipCode)
+        validateCity(city)
         validatePassword(password,
                         passwordWarning,
                         passwordLowerWarning,
@@ -148,7 +142,7 @@ class SignUpFragment : Fragment() {
 
         createAccountButton.setOnClickListener {
 
-            Log.d(TAG,"Button Pressed!")
+            println(1)
             if(checkInputsEmpty(this.firstName)
                 && checkInputsEmpty(this.lastName)
                 && checkInputsEmpty(this.address)
@@ -158,32 +152,32 @@ class SignUpFragment : Fragment() {
                 && checkInputsEmpty(this.zipCode)
                 && checkInputsEmpty(this.city)
                 && signUpViewModel.state != ""
-            ){
-                Log.d(TAG, "isValid")
+            ) {
+                val newUser = BCEUser(
+                    null,
+                    signUpViewModel.firstName,
+                    signUpViewModel.lastName,
+                    signUpViewModel.address,
+                    signUpViewModel.city,
+                    signUpViewModel.state,
+                    signUpViewModel.zipCode,
+                    signUpViewModel.phoneNumber,
+                    signUpViewModel.email,
+                    signUpViewModel.password
+                )
 
-                if(accountValid){
-                    val db = Firebase.firestore
+                println(newUser.zipCode)
+                if(validateAccount(newUser)){
+                    if(signUpViewModel.initAddUser(newUser)){
+                        //GlobalToaster.promptVerifyAccount(requireContext())
+                        view.findNavController().navigate(R.id.action_signUpFragment_to_loginFragment)
 
-                    Log.d(TAG, "isValid")
 
-                    val newUser = BCEUser(
-                        null,
-                        signUpViewModel.firstName,
-                        signUpViewModel.lastName,
-                        signUpViewModel.address,
-                        signUpViewModel.city,
-                        signUpViewModel.state,
-                        signUpViewModel.zipCode,
-                        signUpViewModel.phoneNumber,
-                        signUpViewModel.email,
-                        signUpViewModel.password
-                    )
-
-                    //TODO: REVIEW
-                    authViewModel.addUser(newUser,
-                    signUpViewModel.password)
-
-                    GlobalToaster.promptVerifyAccount(requireContext())
+                    } else {
+                        GlobalToaster.giveGenericError(requireContext())
+                    }
+                } else {
+                    GlobalToaster.promptFormFulfill(requireContext())
                 }
 
             } else {
@@ -202,6 +196,22 @@ class SignUpFragment : Fragment() {
         return true
     }
 
+    private fun validateCity(city : EditText) {
+        city.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                //TODO("Not yet implemented")
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                signUpViewModel.city = city.text.toString()
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                //TODO("Not yet implemented")
+            }
+
+        })
+    }
 
     private fun validateZipCode(zip : EditText) {
         zip.addTextChangedListener( object : TextWatcher {
@@ -212,10 +222,6 @@ class SignUpFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
 
                 signUpViewModel.zipCode = zip.text.toString()
-                if(GlobalPatternMatcher.checkZipValid(signUpViewModel.zipCode)) {
-
-                }
-                //TODO("Add Form Validations for ZIP)
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -406,6 +412,19 @@ class SignUpFragment : Fragment() {
         return false
     }
 
+    private fun validateAccount(newUser : BCEUser) : Boolean {
 
+        println(newUser.zipCode.toString())
 
+        return GlobalPatternMatcher.checkValidEmail(newUser.email.toString())
+                && GlobalPatternMatcher.checkZipValid(newUser.zipCode.toString())
+                && GlobalPatternMatcher.checkAddressValid(newUser.address.toString())
+                && GlobalPatternMatcher.checkNameValid(newUser.firstName.toString())
+                && GlobalPatternMatcher.checkNameValid(newUser.lastName.toString())
+                && GlobalPatternMatcher.checkPhoneNumberValid(newUser.phoneNumber.toString())
+                && GlobalPatternMatcher.checkFinalPasswordValid(newUser.password.toString())
+                && GlobalPatternMatcher.checkCityValid(newUser.city.toString())
+                && newUser.state != ""
+
+    }
 }

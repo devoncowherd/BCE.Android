@@ -360,7 +360,7 @@
 
 
         <Button
-            android:id="@+id/signUpButton"
+            android:id="@+id/createAccountButton"
             android:layout_width="320dp"
             android:layout_height="wrap_content"
             android:text="@string/signUp"

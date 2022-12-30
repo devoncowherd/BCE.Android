@@ -22,7 +22,7 @@ class AccountFragment : Fragment() {
     private lateinit var logoutButton : Button
     private lateinit var firstName : TextView
     private lateinit var lastName : TextView
-    private lateinit var user : BCEUser
+    private lateinit var currentUser : BCEUser
 
 
     override fun onGetLayoutInflater(savedInstanceState: Bundle?): LayoutInflater {
@@ -48,9 +48,9 @@ class AccountFragment : Fragment() {
             .document(auth.uid.toString())
             .get()
             .addOnSuccessListener { documentSnapshot ->
-                user = documentSnapshot.toObject(BCEUser::class.java)!!
-                firstName.text = user.firstName.toString()
-                lastName.text = user.lastName.toString()
+                currentUser = documentSnapshot.toObject(BCEUser::class.java)!!
+                firstName.text = currentUser.firstName.toString()
+                lastName.text = currentUser.lastName.toString()
             }
 
 

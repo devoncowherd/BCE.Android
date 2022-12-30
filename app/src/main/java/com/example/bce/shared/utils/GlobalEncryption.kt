@@ -6,20 +6,26 @@ class GlobalEncryption {
 
     companion object {
         fun encryptPassword(password : String) : String {
-            return MessageDigest.getInstance("SHA-256")
+            val digest = MessageDigest.getInstance("SHA-256")
                 .digest(password.toByteArray())
-                .toHexString()
+
+            return bytesToHex(digest)
         }
 
-        private fun ByteArray.toHexString() : String {
-            val hexString = StringBuilder()
-            for(byte in this) {
-                val hex = Integer.toHexString(0xff and byte.toInt())
+        //CreditsBaeldung
+        private fun bytesToHex(hash : ByteArray) : String {
+            val mHash = hash
+            var hexString = StringBuilder(2 * hash.size)
+            for(byte in hash){
+                var hex = Integer.toHexString(0xff and byte.toInt())
                 if(hex.length == 1) {
-                    hexString.append('0')
+                    hexString.append(0)
+                } else {
+                    hexString.append(hex)
                 }
             }
             return hexString.toString()
+
         }
     }
 }
