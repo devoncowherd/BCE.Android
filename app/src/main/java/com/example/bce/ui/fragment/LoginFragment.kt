@@ -65,6 +65,7 @@ class LoginFragment : Fragment() {
                             it.findNavController().navigate(R.id.action_loginFragment_to_accountFragment)
                         } else {
                             Log.d(TAG.toString(), "Login Unsuccessful")
+                            GlobalToaster.notifyCredentialMismatch(requireContext())
                         }
                     }
             } else {

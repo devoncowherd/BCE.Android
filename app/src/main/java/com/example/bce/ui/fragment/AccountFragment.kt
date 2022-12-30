@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.example.bce.R
@@ -20,8 +19,6 @@ import com.google.firebase.ktx.Firebase
 class AccountFragment : Fragment() {
 
     private lateinit var logoutButton : Button
-    private lateinit var firstName : TextView
-    private lateinit var lastName : TextView
     private lateinit var currentUser : BCEUser
 
 
@@ -41,17 +38,17 @@ class AccountFragment : Fragment() {
         val auth = Firebase.auth
         val db = Firebase.firestore
 
-        firstName = view.findViewById(R.id.accountFirstName)
-        lastName = view.findViewById(R.id.accountLastName)
 
+        //TODO: Move onto coroutine
+        //TODO: Move into VM/Repo
+        //TODO: Convert to observable (RXK?)
         db.collection("users")
             .document(auth.uid.toString())
             .get()
             .addOnSuccessListener { documentSnapshot ->
                 currentUser = documentSnapshot.toObject(BCEUser::class.java)!!
-                firstName.text = currentUser.firstName.toString()
-                lastName.text = currentUser.lastName.toString()
             }
+
 
 
 

@@ -15,6 +15,9 @@
         <action
             android:id="@+id/action_loginFragment_to_accountFragment"
             app:destination="@id/accountFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_adminAccountFragment"
+            app:destination="@id/adminAccountFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
@@ -60,5 +63,14 @@
         <action
             android:id="@+id/action_requestFragment_to_accountFragment"
             app:destination="@id/accountFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/adminAccountFragment"
+        android:name="com.example.bce.AdminAccountFragment"
+        android:label="fragment_admin_account"
+        tools:layout="@layout/fragment_admin_account" >
+        <action
+            android:id="@+id/action_adminAccountFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
 </navigation>

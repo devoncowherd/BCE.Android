@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="job_type_array">
+        <item>Installation</item>
+        <item>Troubleshooting</item>
+        <item>Repair</item>
+        <item>Maintenance</item>
+        <item>Testing</item>
+        <item>Planning</item>
+        <item>Training</item>
+    </string-array>
+</resources>

@@ -7,29 +7,21 @@
     tools:context=".ui.fragment.AccountFragment">
 
     <TextView
-        android:id="@+id/accountFirstName"
+        android:id="@+id/accountLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="firstName"
+        android:text="@string/account"
+        android:layout_margin="24dp"
+        android:textSize="24sp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <TextView
-        android:id="@+id/accountLastName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="lastName"
-        app:layout_constraintTop_toBottomOf="@id/accountFirstName"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        />
-
-    <Button
+    <ImageButton
         android:id="@+id/logoutButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Logout"
+        android:layout_margin="24dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
