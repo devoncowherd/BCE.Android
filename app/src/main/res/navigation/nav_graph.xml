@@ -40,9 +40,6 @@
             android:id="@+id/action_accountFragment_to_updateUserFragment"
             app:destination="@id/updateUserFragment" />
         <action
-            android:id="@+id/action_accountFragment_to_requestFragment"
-            app:destination="@id/requestFragment" />
-        <action
             android:id="@+id/action_accountFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
     </fragment>
@@ -59,11 +56,7 @@
         android:id="@+id/requestFragment"
         android:name="com.example.bce.ui.fragment.RequestFragment"
         android:label="fragment_request"
-        tools:layout="@layout/fragment_request" >
-        <action
-            android:id="@+id/action_requestFragment_to_accountFragment"
-            app:destination="@id/accountFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_request" />
     <fragment
         android:id="@+id/adminAccountFragment"
         android:name="com.example.bce.AdminAccountFragment"
